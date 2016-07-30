@@ -12,7 +12,6 @@ use lithium\core\Libraries;
 use lithium\core\Environment;
 use lithium\data\Connections;
 use lithium\util\Collection;
-use lithium\util\String;
 use lithium\util\Set;
 
 /**
