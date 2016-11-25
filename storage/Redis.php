@@ -331,12 +331,17 @@ class Redis extends \lithium\core\StaticObject {
 		$params = compact('key', 'value', 'options');
 		return static::_filter(__METHOD__, $params, function($self, $params) use ($connection) {
 			$key = $self::getKey($params['key'], $params['options']);
+			$expiry = false;
+			if (isset($params['options']['expiry'])) {
+				$expiry = $params['options']['expiry'];
+				unset($params['options']['expiry']);
+			}
 			if (is_array($params['key'])) {
 				if (!$connection->mset($key)) {
 					return false;
 				}
-				if ($params['options']['expiry']) {
-					$self::_ttl($key, $params['options']['expiry']);
+				if ($expiry) {
+					$self::_ttl($expiry);
 				}
 				return $self::read(array_keys($params['key']), $params['options']);
 			}
@@ -344,8 +349,8 @@ class Redis extends \lithium\core\StaticObject {
 				return $self::invokeMethod('writeHash', array_values($params));
 			}
 			if ($result = $connection->set($key, $params['value'], $params['options'])) {
-				if ($params['options']['expiry']) {
-					$self::_ttl($key, $params['options']['expiry']);
+				if ($expiry) {
+					$self::_ttl($key, $expiry);
 				}
 				return $result;
 			}
