@@ -341,7 +341,7 @@ class Redis extends \lithium\core\StaticObject {
 					return false;
 				}
 				if ($expiry) {
-					$self::_ttl($expiry);
+					$self::_ttl($key, $expiry);
 				}
 				return $self::read(array_keys($params['key']), $params['options']);
 			}
