@@ -8,6 +8,7 @@
 
 namespace li3_redis\storage;
 
+use Redis as RedisCore;
 use lithium\core\Libraries;
 use lithium\core\Environment;
 use lithium\data\Connections;
@@ -250,7 +251,7 @@ class Redis extends \lithium\core\StaticObject {
 				if ($value !== false) {
 					continue;
 				}
-				if ($connection->hLen($key)) {
+				if ($connection->type($key) == RedisCore::REDIS_HASH) {
 					$result[$key] = $connection->hGetAll($key);
 				}
 			}
@@ -581,13 +582,13 @@ class Redis extends \lithium\core\StaticObject {
 						continue;
 					}
 					$redisKey = $self::getKey($key, $params['options']);
-					if ($connection->hLen($redisKey)) {
+					if ($connection->type($redisKey) == RedisCore::REDIS_HASH) {
 						$result[$key] = $connection->hGetAll($redisKey);
 					}
 				}
 				return $result;
 			}
-			if ($connection->hLen($key)) {
+			if ($connection->type($key) == RedisCore::REDIS_HASH) {
 				return $self::readHash($params['key'], '', $params['options']);
 			}
 			return $connection->get($key);
