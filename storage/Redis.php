@@ -1151,7 +1151,7 @@ class Redis extends \lithium\core\StaticObject {
 	 * @return string a concatenation with prefix, a separator (defaults to `:`) and key
 	 */
 	public static function addPrefix($key, $prefix = '', array $options = array()) {
-		$defaults = array('separator' => static::$_config['separator']);
+		$defaults = array('separator' => (isset(static::$_config['separator']) ? static::$_config['separator'] : ':'));
 		$options += $defaults;
 		$result = (!empty($prefix)) ? sprintf('%s%s%s', $prefix, $options['separator'], $key) : $key;
 		return trim($result, $options['separator']);
@@ -1171,8 +1171,8 @@ class Redis extends \lithium\core\StaticObject {
 	 */
 	public static function resolveFormat($key = null, array $options = array()) {
 		$defaults = array(
-			'format' => static::$_config['format'],
-			'separator' => static::$_config['separator'],
+			'format' => (isset(static::$_config['format']) ? static::$_config['format'] : '{:environment}:'),
+			'separator' => (isset(static::$_config['separator']) ? static::$_config['separator'] : ':'),
 			'replacements' => array(),
 		);
 		$options += $defaults;
