@@ -273,7 +273,7 @@ class Redis extends \lithium\core\StaticObject {
 	 * @return array an array containing all keys, matching the search string and their field values
 	 * @filter
 	 */
-	public static function fetchHashFields($search = '*', $field, array $options = array()) {
+	public static function fetchHashFields($search, $field, array $options = array()) {
 		$connection = static::connection();
 		$params = compact('search', 'field', 'options');
 		return static::_filter(__METHOD__, $params, function($self, $params) use ($connection) {
